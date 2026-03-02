@@ -13,8 +13,8 @@ public class Main {
         Vehiculo miBus = new Vehiculo("SNQ574", 16, "Nissan", "Urvan");
 
         // El Admin registra a la tripulación
-        Tripulacion conductor = new Tripulacion(1, "Alejandro", "300000000", "Conductor", "AM/PM");
-        Tripulacion auxiliarAm = new Tripulacion(2, "Maria Elena", "311111111", "Auxiliar", "AM");
+        Tripulacion conductor = new Tripulacion(1, "Alejandro", "3024645363", "Conductor", "AM/PM");
+        Tripulacion auxiliarAm = new Tripulacion(2, "Maria Elena", "3104603175", "Auxiliar", "AM");
 
         // El Admin registra a las estudiantes y sus coordenadas
         Pasajero nina1 = new Pasajero(101, "Bibiana", "Padre1", "Direccion 1", 6.24, -75.58);
@@ -34,7 +34,7 @@ public class Main {
 
 
         // ==========================================
-        // 2. PANEL DE LA AUXILIAR (Operación en Vivo)
+        // 2. PANEL DE LA AUXILIAR lo que hace maria elena
         // ==========================================
         System.out.println("=== INICIANDO RUTA COLOMBO FRANCÉS (" + rutaColomboFrances.getJornada() + ") ===");
         System.out.println("Vehículo: " + rutaColomboFrances.getVehiculo().getPlaca() + " | Puestos disponibles: " + rutaColomboFrances.getVehiculo().getCapacidadPasajeros());
@@ -43,12 +43,12 @@ public class Main {
         System.out.println("Llegando a la parada de las " + rutaColomboFrances.getListaParadas().get(0).getHoraProgramada() + "...");
         System.out.println("Estudiante: " + rutaColomboFrances.getListaParadas().get(0).getPasajero().getNombre());
 
-        // ¡SIMULACIÓN! María Elena hunde el botón verde en su tablet para Bibiana
+        // simulacro, entoncers María Elena hunde el botón verde en su tablet para Bibiana
         rutaColomboFrances.getListaParadas().get(0).setEstado("Abordó con éxito");
         rutaColomboFrances.getListaParadas().get(0).setHoraLlegadaReal("05:19 AM");
 
         // ==========================================
-        // 3. PANEL DEL ACUDIENTE (Lo que ve el papá en su celular)
+        // 3. PANEL DEL ACUDIENTE Lo que ve el papá en su celular
         // ==========================================
         System.out.println("\n--- Notificación en la app del Acudiente ---");
         System.out.println("Estado de Bibiana: " + rutaColomboFrances.getListaParadas().get(0).getEstado());
