@@ -1,57 +1,60 @@
+package ui;
+
 import domain.*;
+import java.util.Scanner; // Para la interacción
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner teclado = new Scanner(System.in);
 
-        // ==========================================
-        // 1. PANEL DEL ADMIN (Crea la base de datos del día)
-        // ==========================================
+        System.out.println("=== CONFIGURACIÓN DE LA RUTA ESCOLAR ===");
 
-        // El Admin registra vehiculo con 16 puestos
-        Vehiculo miBus = new Vehiculo("SNQ574", 16, "Nissan", "Urvan");
+        // 1. Registro del Vehículo
+        System.out.print("Ingrese la placa del vehículo: ");
+        String placa = teclado.nextLine();
+        Vehiculo miBus = new Vehiculo(placa, 16, "Nissan", "Urvan");
 
-        // El Admin registra a la tripulación
+        // 2. Registro de Tripulación
         Tripulacion conductor = new Tripulacion(1, "Alejandro", "3024645363", "Conductor", "AM/PM");
-        Tripulacion auxiliarAm = new Tripulacion(2, "Maria Elena", "3104603175", "Auxiliar", "AM");
 
-        // El Admin registra a las estudiantes y sus coordenadas
-        Pasajero nina1 = new Pasajero(101, "Bibiana", "Padre1", "Direccion 1", 6.24, -75.58);
-        Pasajero nina2 = new Pasajero(102, "Camila", "Padre2", "Direccion 2", 6.25, -75.59);
+        // 3. Registro de Pasajeros y Paradas
+        List<Parada> listaRuta = new ArrayList<>();
+        String continuar = "s";
 
-        // El Admin arma las paradas con los horarios estrictos de la mañana
-        Parada paradaBibiana = new Parada(nina1, "05:18 AM");
-        Parada paradaCamila = new Parada(nina2, "05:25 AM");
+        while(continuar.equalsIgnoreCase("s")) {
+            System.out.print("\nNombre de la estudiante a recoger: ");
+            String nombre = teclado.nextLine();
+            Pasajero nina = new Pasajero(100, nombre, "3000000", "Dirección X", 0.0, 0.0);
 
-        // Mete las paradas en una lista
-        List<Parada> listaRuta1 = new ArrayList<>();
-        listaRuta1.add(paradaBibiana);
-        listaRuta1.add(paradaCamila);
+            System.out.print("Hora programada (ej: 05:20 AM): ");
+            String hora = teclado.nextLine();
+            listaRuta.add(new Parada(nina, hora));
 
-        // El Admin oficializa la Ruta Diaria
-        RutaDiaria rutaColomboFrances = new RutaDiaria("AM", miBus, conductor, auxiliarAm, listaRuta1);
+            System.out.print("¿Desea agregar otra parada? (s/n): ");
+            continuar = teclado.nextLine();
+        }
 
+        RutaDiaria ruta = new RutaDiaria("AM", miBus, conductor, null, listaRuta);
 
-        // ==========================================
-        // 2. PANEL DE LA AUXILIAR lo que hace maria elena
-        // ==========================================
-        System.out.println("=== INICIANDO RUTA COLOMBO FRANCÉS (" + rutaColomboFrances.getJornada() + ") ===");
-        System.out.println("Vehículo: " + rutaColomboFrances.getVehiculo().getPlaca() + " | Puestos disponibles: " + rutaColomboFrances.getVehiculo().getCapacidadPasajeros());
-        System.out.println("Auxiliar a cargo: " + rutaColomboFrances.getAuxiliar().getNombre() + "\n");
+        // 4. Simulacro de Recorrido (Panel de Auxiliar)
+        System.out.println("\n--- INICIANDO RECORRIDO ---");
+        for (Parada p : ruta.getListaParadas()) {
+            System.out.println("\nLlegando a la parada de: " + p.getPasajero().getNombre());
+            System.out.print("¿La estudiante abordó? (s/n): ");
+            String abordo = teclado.nextLine();
 
-        System.out.println("Llegando a la parada de las " + rutaColomboFrances.getListaParadas().get(0).getHoraProgramada() + "...");
-        System.out.println("Estudiante: " + rutaColomboFrances.getListaParadas().get(0).getPasajero().getNombre());
+            if(abordo.equalsIgnoreCase("s")) {
+                p.setEstado("Abordó con éxito");
+                p.setHoraLlegadaReal("Hora Actual");
+            } else {
+                p.setEstado("No salió / Cancelado");
+            }
+            System.out.println("Estado actualizado: " + p.getEstado());
+        }
 
-        // simulacro, entoncers María Elena hunde el botón verde en su tablet para Bibiana
-        rutaColomboFrances.getListaParadas().get(0).setEstado("Abordó con éxito");
-        rutaColomboFrances.getListaParadas().get(0).setHoraLlegadaReal("05:19 AM");
-
-        // ==========================================
-        // 3. PANEL DEL ACUDIENTE Lo que ve el papá en su celular
-        // ==========================================
-        System.out.println("\n--- Notificación en la app del Acudiente ---");
-        System.out.println("Estado de Bibiana: " + rutaColomboFrances.getListaParadas().get(0).getEstado());
-        System.out.println("Hora de abordaje: " + rutaColomboFrances.getListaParadas().get(0).getHoraLlegadaReal());
+        System.out.println("\n=== RUTA FINALIZADA CON ÉXITO ===");
+        teclado.close();
     }
 }
